@@ -1,25 +1,28 @@
 [redis-server]
-redis-master1-ip
-redis-master2-ip
+redis-master1-ip  
+redis-master2-ip  
 redis-master3-ip
 redis-slave1-ip
 redis-slave2-ip
 redis-slave3-ip
 
 [redis-master1]
-redis-master1-ip
+redis-master1-ip     ubuntu ansible_ssh_private_key_file=/path/to/your/.ssh/id_rsa.pub
 
 [redis-master2]
-redis-master2-ip
+redis-master2-ip     ubuntu ansible_ssh_private_key_file=/path/to/your/.ssh/id_rsa.pub
 
 [redis-master2]
-redis-master3-ip
+redis-master3-ip     ubuntu ansible_ssh_private_key_file=/path/to/your/.ssh/id_rsa.pub
 
 [redis-slave1]
-redis-slave1-ip
+redis-slave1-ip      ubuntu ansible_ssh_private_key_file=/path/to/your/.ssh/id_rsa.pub
 
 [redis-slave2]
-redis-slave2-ip
+redis-slave2-ip      ubuntu ansible_ssh_private_key_file=/path/to/your/.ssh/id_rsa.pub
 
-[redis-slave3]
-redis-slave3-ip
+[redis-slave3] 
+redis-slave3-ip      ubuntu ansible_ssh_private_key_file=/path/to/your/.ssh/id_rsa.pub
+
+[redis-server:vars]
+ansible_ssh_user=    ubuntu ansible_ssh_private_key_file=/path/to/your/.ssh/id_rsa.pub

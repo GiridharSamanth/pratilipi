@@ -1,0 +1,141 @@
+---
+
+#####Redis installation on all 6 nodes of instances###################################33
+- name: Redis Cluster Install   
+  hosts: redis-server
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:
+    - name: install redis
+      apt:
+        name: redis-server
+        state: present
+        update_cache: yes
+
+    - name: Redis.conf backup 
+      command: cp /etc/redis.conf /etc/redis_backup.conf
+
+##############################################Bind all master and slave ip in configuration file################################3
+- name: Redis Cluster Install
+  hosts: redis-master1
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:  
+     - name: Insert configuration bind section
+       lineinfile:
+        path: /etc/redis.conf
+        regexp: 'bind 127.0.0.1'
+        line: 'bind master1-ip'
+
+- name: Redis Cluster Install
+  hosts: redis-master2
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:  
+     - name: Insert configuration bind section
+       lineinfile:
+        path: /etc/redis.conf
+        regexp: 'bind 127.0.0.1'
+        line: 'bind master2-ip'
+
+
+- name: Redis Cluster Install
+  hosts: redis-master3
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:  
+     - name: Insert configuration bind section
+       lineinfile:
+        path: /etc/redis.conf
+        regexp: 'bind 127.0.0.1'
+        line: 'bind master2-ip'
+
+- name: Redis Cluster Install
+  hosts: redis-slave1
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:  
+     - name: Insert configuration bind section
+       lineinfile:
+        path: /etc/redis.conf
+        regexp: 'bind 127.0.0.1'
+        line: 'bind slave1-ip'
+
+
+- name: Redis Cluster Install
+  hosts: redis-slave2
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:  
+     - name: Insert configuration bind section
+       lineinfile:
+        path: /etc/redis.conf
+        regexp: 'bind 127.0.0.1'
+        line: 'bind slave2-ip'
+
+
+- name: Redis Cluster Install
+  hosts: redis-slave3
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:  
+     - name: Insert configuration bind section
+       lineinfile:
+        path: /etc/redis.conf
+        regexp: 'bind 127.0.0.1'
+        line: 'bind slave3-ip'
+
+############# Insert rest configuration on all nodes################################
+
+- name: Redis Cluster Install
+  hosts: redis-server
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:  
+     - name: Insert configuration in protected mode section
+       lineinfile:
+        path: /etc/redis.conf
+        regexp: 'protected-mode yes'
+        line: 'protected-mode no'
+
+     - name: Insert configuration in protected mode section
+       lineinfile:
+        path: /etc/redis.conf
+        regexp: 'cluster-enabled no'
+        line: 'cluster-enabled yes'
+
+##########################Restart redis on all server###################################
+
+     - name: Restart service on all nodes
+       service:
+         name: redis seerver
+         state: restarted
+         
+         
+- name: Creating redis cluster 
+  hosts: redis-master1
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:  
+     - name: create redis clusing        
+       command: redis-cli --cluster create master1-ip:6379 master2-ip:6379 master3-ip:6379 slave1-ip:6379 slave2-ip:6379 slave3-ip:6379 --cluster-replicas 1
+         
+
+
+'
+
+
+
+
+
+
+

@@ -1,0 +1,10 @@
+resource "aws_instance" "redis-master1" {
+  ami           = "ami-073c8c0760395aab8"
+  instance_type = "${var.instance_type}"
+  count         = "${var.instance_count}"
+  aws_region    = "{var.aws_region}"
+  tags = {
+   Name  = "${element(var.instance_tags, count.index)}"
+ }
+}
+

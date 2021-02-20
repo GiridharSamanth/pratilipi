@@ -1,0 +1,75 @@
+provider "aws" {
+  access_key = "AKIAZIN2WSLKORJGMQ5X"
+  secret_key = "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"
+  region     = "us-east-2"
+}
+
+
+resource "aws_launch_configuration" "redis-launch-config" {
+  image_id        = "ami-0c5a6cddb08835e09"
+  instance_type   = "t2.micro"
+  security_groups = ["${aws_security_group.my-asg-sg.id}"]
+
+}
+
+resource "aws_autoscaling_group" "example" {
+  launch_configuration = "${aws_launch_configuration.redis-launch-config.name}"
+  vpc_zone_identifier  = ["us-ease-2a","us-east-2b"]
+#  target_group_arns    = ["${var.target_group_arn}"]
+  health_check_type    = "ELB"
+
+  desired_capacity = 2
+  min_size = 1
+  max_size = 3
+
+  tag {
+    key                 = "Name"
+    value               = "my-test-asg"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_security_group" "my-asg-sg" {
+  name   = "my-asg-sg"
+  vpc_id = "${aws_vpc.redis-vpc.id}"
+  
+# allow ingress of port 22
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] / personal-ip 
+  }
+
+  ingress {
+    from_port   = 6379
+    to_port     = 6379
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] / private-ip
+  }
+  ingress {
+    from_port   = 16379
+    to_port     = 16379
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] / private-ip
+  }
+
+  # allow egress of all ports
+  egress {
+    from_port   = 6379
+    to_port     = 6379
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] / private-ip
+  }
+  egress {
+    from_port   = 16379
+    to_port     = 16379
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] / private-ip
+  }
+  
+  
+  tags = {
+   Name = "My VPC Security Group"
+   Description = "My VPC Security Group"
+}

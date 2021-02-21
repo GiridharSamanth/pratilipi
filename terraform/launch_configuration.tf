@@ -1,10 +1,4 @@
 
-provider "aws" {
-  access_key = "AKIAZIN2WSLKORJGMQ5X"
-  secret_key = "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"
-  region     = "ap-south-1"
-}
-
 resource "aws_launch_configuration" "redis-launch" {
   name_prefix   = "redis"
   image_id      = "ami-011bc98513bb0c97f"

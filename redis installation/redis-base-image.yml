@@ -1,0 +1,36 @@
+#####Redis installation on all 1st nodes of instances###################################33
+- name: Redis Cluster Install   
+  hosts: redis-base-image
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:
+    - name: install redis
+      apt:
+        name: redis-server
+        state: present
+        update_cache: yes
+
+    - name: Redis.conf backup 
+      command: cp /etc/redis.conf /etc/redis_backup.conf
+      
+
+############# Insert rest configuration on all nodes################################
+
+- name: Redis Cluster Install
+  hosts: redis-base-image
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:  
+     - name: Insert configuration in protected mode section
+       lineinfile:
+        path: /etc/redis.conf
+        regexp: 'protected-mode yes'
+        line: 'protected-mode no'
+
+     - name: Insert configuration in protected mode section
+       lineinfile:
+        path: /etc/redis.conf
+        regexp: 'cluster-enabled no'
+        line: 'cluster-enabled yes'

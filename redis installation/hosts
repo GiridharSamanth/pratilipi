@@ -6,6 +6,9 @@ redis-slave1-ip
 redis-slave2-ip
 redis-slave3-ip
 
+[redis-base-image]
+redis-base-image-ip
+
 [redis-master1]
 redis-master1-ip   ansible_ssh_user= ubuntu    ansible_ssh_private_key_file=/path/to/your/.ssh/id_rsa.pub
 

@@ -8,7 +8,7 @@ resource "aws_launch_configuration" "redis-launch" {
 
 
 resource "aws_autoscaling_group" "redis-asg" {
-  min_size = 1
-  desired_capacity = 2
-  max_size = 4
+  min_size = 3
+  desired_capacity = 6
+  max_size = 7
 }
